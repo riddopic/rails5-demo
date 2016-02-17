@@ -1,0 +1,44 @@
+app:
+  image: kontena/rails5_demo:latest
+  secrets:
+    - secret: RAILS_POSTGRE_URL
+      name: DATABASE_URL
+      type: env
+    - secret: RAILS_SECRET_KEY_BASE
+      name: SECRET_KEY_BASE
+      type: env
+  environments:
+    - REDIS_URL=redis://%{project-redis}:6379/1
+  hooks:
+    post_start:
+      - name: db_setup
+        cmd: rails db:setup
+        instances: 1
+        oneshot: true
+      - name: db_migration
+        cmd: rails db:migrate
+        instances: 1
+
+sidekiq:
+  image: kontena/rails5_demo:latest
+  secrets:
+    - secret: RAILS_POSTGRE_URL
+      name: DATABASE_URL
+      type: env
+    - secret: RAILS_SECRET_KEY_BASE
+      name: SECRET_KEY_BASE
+      type: env
+  environments:
+    - REDIS_URL=redis://%{project-redis}:6379/2
+  command: bundle exec sidekiq
+
+redis:
+  image: redis:latest
+
+db:
+  image: postgres:latest
+  stateful: true
+  secrets:
+    - secret: POSTGRES_PASSWORD
+      name: POSTGRES_PASSWORD
+      type: env

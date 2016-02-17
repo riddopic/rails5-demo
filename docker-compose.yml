@@ -1,0 +1,23 @@
+app:
+  image: docker_rails5:latest
+  env_file: .env
+  ports:
+    - 8080:8080
+  links:
+    - redis:redis
+    - db:db
+
+sidekiq:
+  image: docker_rails5:latest
+  env_file: .env
+  links:
+    - redis:redis
+  command: bundle exec sidekiq
+
+redis:
+  image: redis:latest
+
+db:
+  image: postgres:latest
+  environment:
+    - POSTGRES_PASSWORD=mypass
