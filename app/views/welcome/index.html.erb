@@ -17,7 +17,8 @@
       <pre>
         <code class="yaml">
         app:
-          image: kontena/rails5_demo:latest
+          image: registry.kontena.local/docker_rails5:latest
+          build: .
           secrets:
             - secret: RAILS_POSTGRE_URL
               name: DATABASE_URL
@@ -26,7 +27,11 @@
               name: SECRET_KEY_BASE
               type: env
           environments:
+            - KONTENA_LB_INTERNAL_PORT=8080
+            - KONTENA_LB_VIRTUAL_HOSTS=rails.kontena.io
             - REDIS_URL=redis://%{project}-redis:6379/1
+          links:
+            - internet-lb
           hooks:
             post_start:
               - name: db_setup
@@ -59,6 +64,13 @@
             - secret: POSTGRES_PASSWORD
               name: POSTGRES_PASSWORD
               type: env
+
+        internet-lb:
+          image: kontena/lb:latest
+          deploy:
+            strategy: daemon
+          ports:
+            - 80:80
         </code>
       </pre>
 

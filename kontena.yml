@@ -1,36 +1,9 @@
-app:
-  image: kontena/rails5_demo:latest
-  secrets:
-    - secret: RAILS_POSTGRE_URL
-      name: DATABASE_URL
-      type: env
-    - secret: RAILS_SECRET_KEY_BASE
-      name: SECRET_KEY_BASE
-      type: env
-  environments:
-    - REDIS_URL=redis://%{project-redis}:6379/1
-  hooks:
-    post_start:
-      - name: db_setup
-        cmd: rails db:setup
-        instances: 1
-        oneshot: true
-      - name: db_migration
-        cmd: rails db:migrate
-        instances: 1
-
-sidekiq:
-  image: kontena/rails5_demo:latest
-  secrets:
-    - secret: RAILS_POSTGRE_URL
-      name: DATABASE_URL
-      type: env
-    - secret: RAILS_SECRET_KEY_BASE
-      name: SECRET_KEY_BASE
-      type: env
-  environments:
-    - REDIS_URL=redis://%{project-redis}:6379/2
-  command: bundle exec sidekiq
+internet-lb:
+  image: kontena/lb:latest
+  deploy:
+    strategy: daemon
+  ports:
+    - 80:80
 
 redis:
   image: redis:latest
@@ -42,3 +15,50 @@ db:
     - secret: POSTGRES_PASSWORD
       name: POSTGRES_PASSWORD
       type: env
+app:
+  image: registry.kontena.local/docker_rails5:latest
+  build: .
+  secrets:
+    - secret: RAILS_POSTGRE_URL
+      name: DATABASE_URL
+      type: env
+    - secret: RAILS_SECRET_KEY_BASE
+      name: SECRET_KEY_BASE
+      type: env
+    - secret: RAILS_GITHUB_CLIENT_ID
+      name: GITHUB_CLIENT_ID
+      type: env
+    - secret: RAILS_GITHUB_CLIENT_SECRET
+      name: GITHUB_CLIENT_SECRET
+      type: env
+    - secret: RAILS_GITHUB_TOKEN
+      name: GITHUB_TOKEN
+      type: env
+  environment:
+    - KONTENA_LB_INTERNAL_PORT=8080
+    - KONTENA_LB_VIRTUAL_HOSTS=rails.kontena.io
+    - GITHUB_REPO=kontena/kontena
+  hooks:
+    post_start:
+      - name: db_setup
+        cmd: rails db:setup
+        instances: 1
+        oneshot: true
+      - name: db_migration
+        cmd: rails db:migrate
+        instances: 1
+  links:
+    - internet-lb
+
+sidekiq:
+  image: registry.kontena.local/docker_rails5:latest
+  secrets:
+    - secret: RAILS_POSTGRE_URL
+      name: DATABASE_URL
+      type: env
+    - secret: RAILS_SECRET_KEY_BASE
+      name: SECRET_KEY_BASE
+      type: env
+  environment:
+    - REDIS_URL=redis://%{project}-redis:6379/2
+  command: bundle exec sidekiq
