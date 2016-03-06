@@ -5,8 +5,7 @@ class GitHubStreamer
     stargazers_count = github_service.stargazers_count rescue 0
 
     task = Concurrent::TimerTask.new(execution_interval: 10) do
-      new_count = github_service.stargazers_count rescue 0
-      puts "GitHub stargazers: #{new_count}"
+      new_count = github_service.stargazers_count rescue 0      
       if new_count != stargazers_count
         ActionCable.server.broadcast "github", {type: 'stargazers_count', result: new_count}
         stargazers_count = new_count

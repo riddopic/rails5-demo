@@ -26,7 +26,7 @@
               name: SECRET_KEY_BASE
               type: env
           environments:
-            - REDIS_URL=redis://%{project-redis}:6379/1
+            - REDIS_URL=redis://%{project}-redis:6379/1
           hooks:
             post_start:
               - name: db_setup
@@ -47,7 +47,7 @@
               name: SECRET_KEY_BASE
               type: env
           environments:
-            - REDIS_URL=redis://%{project-redis}:6379/2
+            - REDIS_URL=redis://%{project}-redis:6379/2
           command: bundle exec sidekiq
 
         redis:
