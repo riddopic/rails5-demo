@@ -5,9 +5,9 @@
 
 1. Setup Kontena: [Quick Start](http://kontena.io/docs/getting-started/quick-start)
 
-2. Write secrets to Kontena Vault
+2. Write secrets to [Kontena Vault](http://kontena.io/docs/using-kontena/vault)
 
-  `$ kontena vault write POSTGRES_PASSWORD <password>`
+  `$ kontena vault write POSTGRE_PASSWORD <password>`
 
   `$ kontena vault write RAILS_SECRET_KEY_BASE <key_base>`
 

@@ -19,7 +19,7 @@ app:
   image: registry.kontena.local/docker_rails5:latest
   build: .
   secrets:
-    - secret: RAILS_POSTGRES_URL
+    - secret: RAILS_POSTGRE_URL
       name: DATABASE_URL
       type: env
     - secret: RAILS_SECRET_KEY_BASE
@@ -55,7 +55,7 @@ app:
 sidekiq:
   image: registry.kontena.local/docker_rails5:latest
   secrets:
-    - secret: RAILS_POSTGRES_URL
+    - secret: RAILS_POSTGRE_URL
       name: DATABASE_URL
       type: env
     - secret: RAILS_SECRET_KEY_BASE
