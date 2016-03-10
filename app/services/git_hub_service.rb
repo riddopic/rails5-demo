@@ -21,11 +21,11 @@ class GitHubService
   end
 
   def star
-    @client.star('kontena/kontena-loadbalancer')
+    @client.star(ENV['GITHUB_REPO'])
   end
 
   def starred?
-    @client.starred?('kontena/kontena-loadbalancer')
+    @client.starred?(ENV['GITHUB_REPO'])
   end
 
 end

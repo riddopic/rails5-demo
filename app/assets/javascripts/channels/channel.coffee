@@ -1,6 +1,5 @@
 App.cable.subscriptions.create "WebSocketChannel",
-  received: (data) ->
-    console.log(data)
+  received: (data) ->    
     if data.type == 'stargazers_count'
       $("#count").html(data.result)
     else if data.type == 'starring'

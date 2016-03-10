@@ -12,14 +12,14 @@ db:
   image: postgres:latest
   stateful: true
   secrets:
-    - secret: POSTGRES_PASSWORD
-      name: POSTGRES_PASSWORD
+    - secret: POSTGRE_PASSWORD
+      name: POSTGRE_PASSWORD
       type: env
 app:
   image: registry.kontena.local/docker_rails5:latest
   build: .
   secrets:
-    - secret: RAILS_POSTGRE_URL
+    - secret: RAILS_POSTGRES_URL
       name: DATABASE_URL
       type: env
     - secret: RAILS_SECRET_KEY_BASE
@@ -32,12 +32,14 @@ app:
       name: GITHUB_CLIENT_SECRET
       type: env
     - secret: RAILS_GITHUB_TOKEN
-      name: GITHUB_TOKEN
+      name: GITHUB_ACCESS_TOKEN
       type: env
   environment:
     - KONTENA_LB_INTERNAL_PORT=8080
     - KONTENA_LB_VIRTUAL_HOSTS=rails-on-docker.kontena.io
     - GITHUB_REPO=kontena/kontena
+    - CABLE_REDIS_URL=redis://%{project}-redis:6379/1
+    - REDIS_URL=redis://%{project}-redis:6379/2
   hooks:
     post_start:
       - name: db_setup
@@ -53,7 +55,7 @@ app:
 sidekiq:
   image: registry.kontena.local/docker_rails5:latest
   secrets:
-    - secret: RAILS_POSTGRE_URL
+    - secret: RAILS_POSTGRES_URL
       name: DATABASE_URL
       type: env
     - secret: RAILS_SECRET_KEY_BASE
@@ -61,4 +63,7 @@ sidekiq:
       type: env
   environment:
     - REDIS_URL=redis://%{project}-redis:6379/2
+    - GITHUB_REPO=kontena/kontena
+  volumes_from:
+    - %{project}-app-%%s
   command: bundle exec sidekiq
