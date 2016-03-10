@@ -25,4 +25,4 @@
 
 ## About Kontena
 
-Kontena is a new open source Docker platform including orchestration, service discovery, overlay networking and all the tools required to run your containerized workloads. Kontena is built to maximize developer happiness. It works on any cloud, it's easy to setup and super simple to use. [Give it a try]((http://kontena.io/docs/getting-started/quick-start))! If you like it, please star it on [GitHub](https://github.com/kontena/kontena) and follow us on [Twitter]()!
+[Kontena](http://www.kontena.io) is a new open source Docker platform including orchestration, service discovery, overlay networking and all the tools required to run your containerized workloads. Kontena is built to maximize developer happiness. It works on any cloud, it's easy to setup and super simple to use. [Give it a try]((http://kontena.io/docs/getting-started/quick-start))! If you like it, please star it on [GitHub](https://github.com/kontena/kontena) and follow us on [Twitter]()!
