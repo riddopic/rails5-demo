@@ -25,7 +25,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'redis', '~> 3.0'
 
 # Use sidekiq for Action Job
-gem 'sidekiq', '~> 4.0'
+gem 'sidekiq', '~> 7.1', '>= 7.1.3'
 
 gem 'octokit'
 # Use ActiveModel has_secure_password
